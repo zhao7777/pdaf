@@ -351,6 +351,8 @@ SUBROUTINE PDAF_lestkf_analysis_fixed(domain_p, step, dim_l, dim_obs_f, dim_obs_
   CALL PDAF_timeit(51, 'old')
 
   IF (debug>0) &
+       WRITE (*,*) '++ PDAF-debug PDAF_lestkf_analysis_fixed:', debug, '  forget', forget
+  IF (debug>0) &
        WRITE (*,*) '++ PDAF-debug PDAF_lestkf_analysis:', debug, '  A^-1_l', Ainv_l
 
   CALL PDAF_timeit(31, 'old')
