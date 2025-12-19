@@ -1839,8 +1839,8 @@ module enkf_clm_mod
         min_col = minval(state_loc2clm_c_p, mask=(state_loc2clm_c_p /= ispval))
         max_col = maxval(state_loc2clm_c_p, mask=(state_loc2clm_c_p /= ispval))
         num_invalid = count(state_loc2clm_c_p == ispval)
-        num_outofrange = count(state_loc2clm_c_p < begc .or. state_loc2clm_c_p > endc, &
-                               mask=(state_loc2clm_c_p /= ispval))
+        num_outofrange = count(state_loc2clm_c_p < begc .or. state_loc2clm_c_p > endc &
+                               .and. state_loc2clm_c_p /= ispval)
 
         write(*,'(a)') '=== DEBUG state_loc2clm_c_p mapping ==='
         write(*,'(a,i8,a,i8,a,i8)') '  Patches: begp=', begp, ', endp=', endp, &
