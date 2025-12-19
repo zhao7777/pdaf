@@ -285,6 +285,17 @@ SUBROUTINE init_dim_obs_l_pdaf(domain_p, step, dim_obs_f, dim_obs_l)
 #endif
 #endif
 
+     ! DEBUG: Print initial state before loop
+     if (domain_p == 1) then
+        write(*,'(a,i6,a,i6,a,f12.3)') 'DEBUG init_dim_obs_l: domain_p=', domain_p, &
+             ', dim_obs=', dim_obs, ', cradius=', cradius
+#ifdef CLMSA
+        write(*,'(a,f12.6,a,f12.6)') '  Domain lon=', &
+             lon(mycgridcell(state_loc2clm_c_p(domain_p))), &
+             ', lat=', lat(mycgridcell(state_loc2clm_c_p(domain_p)))
+#endif
+     end if
+
      do i = 1,dim_obs
 #ifdef CLMSA
         ! Units: lat/lon (degrees)
@@ -308,11 +319,27 @@ SUBROUTINE init_dim_obs_l_pdaf(domain_p, step, dim_obs_f, dim_obs_l)
         dist = sqrt(real(dx)**2 + real(dy)**2)
 #endif
         obsdist(i) = dist
+
+        ! DEBUG: Print details for first domain and first few obs
+        if (domain_p == 1 .and. i <= 5) then
+#ifdef CLMSA
+           write(*,'(a,i4,a,f12.6,a,f12.6,a,f12.3,a,l1)') &
+                '  Obs ', i, ': lon=', clmobs_lon(i), ', lat=', clmobs_lat(i), &
+                ', dist(km)=', dist, ', within_radius=', (dist <= real(cradius))
+#endif
+        end if
+
         if (dist <= real(cradius)) then
            dim_obs_l = dim_obs_l + 1
            obsind(i) = 1
         end if
      end do
+
+     ! DEBUG: Print results after loop
+     if (domain_p == 1) then
+        write(*,'(a,i6,a,i6)') 'DEBUG init_dim_obs_l: domain_p=', domain_p, &
+             ', final dim_obs_l=', dim_obs_l
+     end if
      end if
   end if
 #endif
