@@ -1831,10 +1831,11 @@ module enkf_clm_mod
         state_loc2clm_c_p(domain_p) = patch%column(begp + domain_p - 1)
       end do
 
-      ! DEBUG: Validate and print summary of state_loc2clm_c_p mapping
+      ! Validate state_loc2clm_c_p mapping - only print if anomalies detected
       block
         integer :: min_col, max_col, num_invalid, num_outofrange
         integer :: print_first, print_last
+        logical :: has_anomalies
 
         min_col = minval(state_loc2clm_c_p, mask=(state_loc2clm_c_p /= ispval))
         max_col = maxval(state_loc2clm_c_p, mask=(state_loc2clm_c_p /= ispval))
@@ -1842,36 +1843,45 @@ module enkf_clm_mod
         num_outofrange = count(state_loc2clm_c_p < begc .or. state_loc2clm_c_p > endc &
                                .and. state_loc2clm_c_p /= ispval)
 
-        write(*,'(a)') '=== DEBUG state_loc2clm_c_p mapping ==='
-        write(*,'(a,i8,a,i8,a,i8)') '  Patches: begp=', begp, ', endp=', endp, &
-             ', n_domains_p=', n_domains_p
-        write(*,'(a,i8,a,i8)') '  Columns: begc=', begc, ', endc=', endc
-        write(*,'(a,i8,a,i8)') '  Column range in mapping: min=', min_col, ', max=', max_col
-        write(*,'(a,i8)') '  Number of invalid (ispval) entries: ', num_invalid
-        write(*,'(a,i8)') '  Number of out-of-range entries: ', num_outofrange
+        has_anomalies = (num_invalid > 0) .or. (num_outofrange > 0)
 
-        ! Print first and last few entries
-        print_first = min(5, n_domains_p)
-        print_last = min(5, n_domains_p)
-        write(*,'(a,i4,a)') '  First ', print_first, ' entries:'
-        do domain_p = 1, print_first
-          write(*,'(a,i6,a,i8,a,i8,a,i8)') '    domain_p=', domain_p, &
-               ' -> patch=', begp + domain_p - 1, &
-               ' -> column=', state_loc2clm_c_p(domain_p), &
-               ' (expected begc+offset=', begc + domain_p - 1, ')'
-        end do
-        if (n_domains_p > print_first + print_last) then
-          write(*,'(a)') '    ...'
+        ! Only print if anomalies are detected
+        if (has_anomalies) then
+          write(*,'(a)') '!!! WARNING: Anomalies in state_loc2clm_c_p mapping !!!'
+          write(*,'(a,i8,a,i8,a,i8)') '  Patches: begp=', begp, ', endp=', endp, &
+               ', n_domains_p=', n_domains_p
+          write(*,'(a,i8,a,i8)') '  Columns: begc=', begc, ', endc=', endc
+          write(*,'(a,i8,a,i8)') '  Column range in mapping: min=', min_col, ', max=', max_col
+
+          if (num_invalid > 0) then
+            write(*,'(a,i8,a)') '  ERROR: ', num_invalid, ' invalid (ispval) entries found!'
+            ! Print indices with invalid values
+            write(*,'(a)') '  Invalid entries at domain_p:'
+            do domain_p = 1, n_domains_p
+              if (state_loc2clm_c_p(domain_p) == ispval) then
+                write(*,'(a,i6,a,i8)') '    domain_p=', domain_p, &
+                     ' -> patch=', begp + domain_p - 1
+              end if
+            end do
+          end if
+
+          if (num_outofrange > 0) then
+            write(*,'(a,i8,a)') '  ERROR: ', num_outofrange, ' out-of-range entries found!'
+            ! Print indices with out-of-range values
+            write(*,'(a)') '  Out-of-range entries at domain_p:'
+            do domain_p = 1, n_domains_p
+              if ((state_loc2clm_c_p(domain_p) < begc .or. &
+                   state_loc2clm_c_p(domain_p) > endc) .and. &
+                   state_loc2clm_c_p(domain_p) /= ispval) then
+                write(*,'(a,i6,a,i8,a,i8,a,i8,a,i8)') '    domain_p=', domain_p, &
+                     ' -> patch=', begp + domain_p - 1, &
+                     ' -> column=', state_loc2clm_c_p(domain_p), &
+                     ' (expected range: ', begc, '-', endc, ')'
+              end if
+            end do
+          end if
+          write(*,'(a)') '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'
         end if
-        if (n_domains_p > print_first) then
-          write(*,'(a,i4,a)') '  Last ', print_last, ' entries:'
-          do domain_p = max(print_first+1, n_domains_p - print_last + 1), n_domains_p
-            write(*,'(a,i6,a,i8,a,i8)') '    domain_p=', domain_p, &
-                 ' -> patch=', begp + domain_p - 1, &
-                 ' -> column=', state_loc2clm_c_p(domain_p)
-          end do
-        end if
-        write(*,'(a)') '======================================='
       end block
 
       ! Allocate state_loc2clm_p_p
