@@ -353,6 +353,9 @@ SUBROUTINE PDAF_lestkf_analysis(domain_p, step, dim_l, dim_obs_f, dim_obs_l, &
 
   END IF haveobsA
 
+  IF (debug>0) &
+       WRITE (*,*) '++ PDAF-debug PDAF_lestkf_analysis:', debug, '  A^-1_l (before forget)', Ainv_l
+
   ! *** Complete computation of Ainv  ***
   ! ***   -1                T         ***
   ! ***  A  = forget I  + HL RiHL     ***
