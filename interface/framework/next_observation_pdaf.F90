@@ -171,13 +171,13 @@ SUBROUTINE next_observation_pdaf(stepnow, nsteps, doexit, time)
     ! Update da_interval
     da_interval = da_interval_new
 
-    if (mype_world==0 .and. screen > 2) then
+    if (mype_world==0) then
       write(*,'(a,es22.15)')'TSMP-PDAF (next_observation_pdaf.F90) da_interval: ', da_interval
     end if
 
   end if
 
-  if (mype_world==0 .and. screen > 2) then
+  if (mype_world==0) then
       write(*,*)'TSMP-PDAF (next_observation_pdaf.F90) stepnow: ',stepnow
       write(*,*)'TSMP-PDAF (next_observation_pdaf.F90) no_obs, nsteps, counter: ',no_obs,nsteps,counter
   end if
