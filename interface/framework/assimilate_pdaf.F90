@@ -106,7 +106,8 @@ SUBROUTINE assimilate_pdaf()
 ! *** for main process        ***
 #ifdef PDAF_DEBUG
   ! IF (mype_world == 0) CALL PDAF_set_debug_flag(1)
-  CALL PDAF_set_debug_flag(mype_world + 1)
+  ! CALL PDAF_set_debug_flag(mype_world + 1)
+  IF (mype_world == 11) CALL PDAF_set_debug_flag(mype_world + 1)
 #endif
 
 ! *********************************
