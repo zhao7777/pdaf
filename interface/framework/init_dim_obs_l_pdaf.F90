@@ -366,5 +366,9 @@ SUBROUTINE init_dim_obs_l_pdaf(domain_p, step, dim_obs_f, dim_obs_l)
   ! observation vector using remote sensing data
   IF (ALLOCATED(log_var_id)) DEALLOCATE(log_var_id)
 
+  ! DEBUG: Print dim_obs_l right before return
+  write(*,'(a,i6,a,i6)') 'DEBUG init_dim_obs_l RETURN: domain_p=', domain_p, &
+       ', returning dim_obs_l=', dim_obs_l
+
 END SUBROUTINE init_dim_obs_l_pdaf
 

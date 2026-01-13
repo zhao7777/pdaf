@@ -443,6 +443,10 @@ SUBROUTINE  PDAF_lestkf_update(step, dim_p, dim_obs_f, dim_ens, rank, &
      CALL U_init_dim_obs_l(domain_p, step, dim_obs_f, dim_obs_l)
      CALL PDAF_timeit(9, 'old')
 
+     ! DEBUG: Print dim_obs_l immediately after call returns
+     WRITE (*,'(a,i6,a,i6)') 'DEBUG PDAF_lestkf RECEIVED: domain_p=', domain_p, &
+          ', received dim_obs_l=', dim_obs_l
+
      IF (debug>0) &
           WRITE (*,*) '++ PDAF-debug PDAF_lestkf_update:', debug, '  dim_obs_l', dim_obs_l
 
