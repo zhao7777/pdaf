@@ -113,11 +113,11 @@ SUBROUTINE collect_state_pdaf(dim_p, state_p)
 #endif
 
 #ifdef PDAF_DEBUG
-  ! Debug output: Collected state array
- DO i = 1, MIN(dim_p,6)
-   WRITE(*, '(a,x,a,i5,x,a,i1,a,x,f12.8)') "TSMP-PDAF-debug", "mype(w)=", mype_world, &
-     "collect_state_pdaf: state_p(", i, "):", state_p(i)
- END DO
+ !  ! Debug output: Collected state array
+ ! DO i = 1, MIN(dim_p,6)
+ !   WRITE(*, '(a,x,a,i5,x,a,i1,a,x,f12.8)') "TSMP-PDAF-debug", "mype(w)=", mype_world, &
+ !     "collect_state_pdaf: state_p(", i, "):", state_p(i)
+ ! END DO
 #endif
 
 

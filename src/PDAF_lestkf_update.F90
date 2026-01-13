@@ -475,8 +475,8 @@ SUBROUTINE  PDAF_lestkf_update(step, dim_p, dim_obs_f, dim_ens, rank, &
         CALL U_g2l_state(step, domain_p, dim_p, ens_p(:, member), dim_l, &
              ens_l(:, member))
 
-        IF (debug>0) &
-             WRITE (*,*) '++ PDAF-debug PDAF_lestkf_update:', debug, '  ens_l', ens_l(:,member)
+        ! IF (debug>0) &
+        !      WRITE (*,*) '++ PDAF-debug PDAF_lestkf_update:', debug, '  ens_l', ens_l(:,member)
 
      END DO
 
@@ -490,8 +490,8 @@ SUBROUTINE  PDAF_lestkf_update(step, dim_p, dim_obs_f, dim_ens, rank, &
      CALL U_g2l_state(step, domain_p, dim_p, state_p, dim_l, &
           state_l)
 
-     IF (debug>0) &
-          WRITE (*,*) '++ PDAF-debug PDAF_lestkf_update:', debug, '  meanens_l', state_l
+     ! IF (debug>0) &
+     !      WRITE (*,*) '++ PDAF-debug PDAF_lestkf_update:', debug, '  meanens_l', state_l
 
      CALL PDAF_timeit(15, 'old')
 
@@ -541,7 +541,7 @@ SUBROUTINE  PDAF_lestkf_update(step, dim_p, dim_obs_f, dim_ens, rank, &
         IF (debug>0) then
            WRITE (*,*) '++ PDAF-debug: ', debug, &
                 'PDAF_lestkf_update -- call l2g_state for ensemble member', member
-           WRITE (*,*) '++ PDAF-debug PDAF_lestkf_update:', debug, '  ens_l', ens_l(:,member)
+        !    WRITE (*,*) '++ PDAF-debug PDAF_lestkf_update:', debug, '  ens_l', ens_l(:,member)
         END IF
 
         CALL U_l2g_state(step, domain_p, dim_l, ens_l(:, member), dim_p, ens_p(:,member))
@@ -553,7 +553,7 @@ SUBROUTINE  PDAF_lestkf_update(step, dim_p, dim_obs_f, dim_ens, rank, &
         IF (debug>0) THEN
            WRITE (*,*) '++ PDAF-debug: ', debug, &
                 'PDAF_lestkf_update -- call l2g_state for ensemble mean'
-           WRITE (*,*) '++ PDAF-debug PDAF_lestkf_update:', debug, '  meanens_l', state_l
+        !    WRITE (*,*) '++ PDAF-debug PDAF_lestkf_update:', debug, '  meanens_l', state_l
         END IF
 
         CALL U_l2g_state(step, domain_p, dim_l, state_l, dim_p, state_p)
