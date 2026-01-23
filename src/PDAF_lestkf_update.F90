@@ -444,8 +444,10 @@ SUBROUTINE  PDAF_lestkf_update(step, dim_p, dim_obs_f, dim_ens, rank, &
      CALL PDAF_timeit(9, 'old')
 
      ! DEBUG: Print dim_obs_l immediately after call returns
-     WRITE (*,'(a,i6,a,i6)') 'DEBUG PDAF_lestkf RECEIVED: domain_p=', domain_p, &
-          ', received dim_obs_l=', dim_obs_l
+     if (dim_obs_l > 0) then
+       WRITE (*,'(a,i5,a,i6,a,i6)') 'DEBUG mype(w)=',mype,'PDAF_lestkf RECEIVED: domain_p=', domain_p, &
+         ', received dim_obs_l=', dim_obs_l
+     end if
 
      IF (debug>0) &
           WRITE (*,*) '++ PDAF-debug PDAF_lestkf_update:', debug, '  dim_obs_l', dim_obs_l

@@ -49,7 +49,7 @@ SUBROUTINE init_dim_obs_l_pdaf(domain_p, step, dim_obs_f, dim_obs_l)
   !        ONLY: nx, ny, local_dims, &
   !        cradius, coords_obs, coords_l, obs_index_p, obs_index_l
   USE mod_parallel_pdaf, &
-       ONLY: mype_filter, npes_filter, comm_filter
+       ONLY: mype_world, mype_filter, npes_filter, comm_filter
   USE mod_assimilation, &
        ONLY: cradius, obs_index_l, dim_obs, obs_p, distance, obs_index_p, &
        dim_state, dim_obs_p, &
@@ -367,8 +367,10 @@ SUBROUTINE init_dim_obs_l_pdaf(domain_p, step, dim_obs_f, dim_obs_l)
   IF (ALLOCATED(log_var_id)) DEALLOCATE(log_var_id)
 
   ! DEBUG: Print dim_obs_l right before return
-  write(*,'(a,i6,a,i6)') 'DEBUG init_dim_obs_l RETURN: domain_p=', domain_p, &
-       ', returning dim_obs_l=', dim_obs_l
+  if (dim_obs_l > 0) then
+    write(*,'(a,i5,a,i6,a,i6)') 'DEBUG, mype(w)=', mype_world ,' init_dim_obs_l RETURN: domain_p=', domain_p, &
+      ', returning dim_obs_l=', dim_obs_l
+  end if
 
 END SUBROUTINE init_dim_obs_l_pdaf
 
