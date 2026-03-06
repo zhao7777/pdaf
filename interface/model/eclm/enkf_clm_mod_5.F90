@@ -464,13 +464,13 @@ module enkf_clm_mod
       ! layer index of CLM, but rather a variable index of the state
       ! vector, in order tomake the index mapping 1:1.
       IF (allocated(state_clm2pdaf_p)) deallocate(state_clm2pdaf_p)
-      allocate(state_clm2pdaf_p(begp:endp,1:(2+nlevgrnd)))
+      allocate(state_clm2pdaf_p(begp:endp,1:(2+n_lev_T)))
       !                                      ^
       !                                      dimension layout:
       !                                      1: TSKIN
       !                                      2:(1+n_lev_T): TSOIL layers
       !                                      (2+n_lev_T): TVEG
-      do lev=1,(2+nlevgrnd)
+      do lev=1,(2+n_lev_T)
         do p=begp,endp
           ! Default: inactive
           state_clm2pdaf_p(p,lev) = ispval
@@ -564,14 +564,14 @@ module enkf_clm_mod
       ! layer index of CLM, but rather a variable index of the state
       ! vector, in order tomake the index mapping 1:1.
       IF (allocated(state_clm2pdaf_p)) deallocate(state_clm2pdaf_p)
-      allocate(state_clm2pdaf_p(begp:endp,1:(3+nlevgrnd)))
+      allocate(state_clm2pdaf_p(begp:endp,1:(3+n_lev_T)))
       !                                      ^
       !                                      dimension layout:
       !                                      1: TSKIN
       !                                      2:(1+n_lev_T): TSOIL layers
       !                                      (2+n_lev_T): TVEG
       !                                      (3+n_lev_T): TGRND
-      do lev=1,(3+nlevgrnd)
+      do lev=1,(3+n_lev_T)
         do p=begp,endp
           ! Default: inactive
           state_clm2pdaf_p(p,lev) = ispval
@@ -1493,9 +1493,12 @@ module enkf_clm_mod
         end if mask_snow_1
 
       end do
-      if (incr_warn_count_skin   > 0) print *, "WARNING: t_skin total increments exceeding T_max_increment:", incr_warn_count_skin
-      if (incr_warn_count_soisno > 0) print *, "WARNING: t_soisno total increments exceeding T_max_increment:", incr_warn_count_soisno
-      if (incr_warn_count_veg    > 0) print *, "WARNING: t_veg total increments exceeding T_max_increment:", incr_warn_count_veg
+      if (incr_warn_count_skin   > 0) print *, "WARNING: t_skin total increments exceeding T_max_increment:", &
+        incr_warn_count_skin
+      if (incr_warn_count_soisno > 0) print *, "WARNING: t_soisno total increments exceeding T_max_increment:", &
+        incr_warn_count_soisno
+      if (incr_warn_count_veg    > 0) print *, "WARNING: t_veg total increments exceeding T_max_increment:", &
+        incr_warn_count_veg
       deallocate(col_updated)
     endif
 
@@ -1610,10 +1613,14 @@ module enkf_clm_mod
         end if mask_snow_2
 
       end do
-      if (incr_warn_count_skin   > 0) print *, "WARNING: t_skin total increments exceeding T_max_increment:", incr_warn_count_skin
-      if (incr_warn_count_soisno > 0) print *, "WARNING: t_soisno total increments exceeding T_max_increment:", incr_warn_count_soisno
-      if (incr_warn_count_veg    > 0) print *, "WARNING: t_veg total increments exceeding T_max_increment:", incr_warn_count_veg
-      if (incr_warn_count_grnd   > 0) print *, "WARNING: t_grnd total increments exceeding T_max_increment:", incr_warn_count_grnd
+      if (incr_warn_count_skin   > 0) print *, "WARNING: t_skin total increments exceeding T_max_increment:", &
+        incr_warn_count_skin
+      if (incr_warn_count_soisno > 0) print *, "WARNING: t_soisno total increments exceeding T_max_increment:", &
+        incr_warn_count_soisno
+      if (incr_warn_count_veg    > 0) print *, "WARNING: t_veg total increments exceeding T_max_increment:", &
+        incr_warn_count_veg
+      if (incr_warn_count_grnd   > 0) print *, "WARNING: t_grnd total increments exceeding T_max_increment:", &
+        incr_warn_count_grnd
     endif
 
 #ifdef PDAF_DEBUG
